@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import loginService from './services/login'
 import blogsService from './services/blogs'
 import Blog from './components/Blog'
+import SubmitBlog from './components/SubmitBlog'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -81,6 +82,7 @@ const App = () => {
       <h1>Blogs</h1>
       <p>{user.name} logged in <button onClick={() => logout()}>Logout</button></p>
 
+      <SubmitBlog />
       {content()}
     </div>
   )
