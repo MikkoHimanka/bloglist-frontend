@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import loginService from './services/login'
 import blogsService from './services/blogs'
 import Blog from './components/Blog'
@@ -10,10 +10,22 @@ const App = () => {
   
   const [blogs, setBlogs] = useState([])
 
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem('loggedUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogsService.setToken(user.token)
+    }
+  }, [])
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
       const user = await loginService.login({username, password})
+
+      window.localStorage.setItem('loggedUser', JSON.stringify(user))
+      blogsService.setToken(user.token)
 
       setUser(user)
       setUsername('')
@@ -52,23 +64,24 @@ const App = () => {
     return blogs.map(blog => <li key={blog.id}><Blog blog={blog} /></li>)
   }
 
-  return (
+  const logout = () => {
+    window.localStorage.clear()
+    setUser(null)
+  }
+
+  if (user === null) {
+    return (
+      <div>
+        <h1>Log in to application</h1>
+        {loginForm()}
+      </div>
+    )
+  } else return (
     <div>
-      {user === null ?
-        <h1>log in to application</h1> :
-        <h1>blogs</h1>
-      }
+      <h1>Blogs</h1>
+      <p>{user.name} logged in <button onClick={() => logout()}>Logout</button></p>
 
-      {user === null ?
-        loginForm() :
-        <div>
-          <p>{user.name} logged in</p>
-        </div>
-      }
-
-      <ul>
-        {user !== null ? content() : null}
-      </ul>
+      {content()}
     </div>
   )
 }

@@ -5,5 +5,10 @@ const getAll = () => {
   const request = axios.get(baseUrl)
   return request.then(response => response.data)
 }
+ let token = null
+ 
+const setToken = newToken => {
+  token = `bearer ${newToken}`
+}
 
-export default { getAll }
+export default { getAll, setToken }
