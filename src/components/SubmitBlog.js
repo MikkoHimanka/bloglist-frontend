@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import blogsService from '../services/blogs'
 
 
-const SubmitBlog = () => {
+const SubmitBlog = ({message}) => {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [url, setUrl] = useState('')
@@ -17,7 +17,15 @@ const SubmitBlog = () => {
 
         try {
             blogsService.create(blog)
+            message(`A new blog ${title} by ${author} added`, false)
+            setTimeout(() => {
+                message(null, false)
+            }, 5000)
         } catch (exception) {
+            message('Error creating blog', true)
+            setTimeout(() => {
+                message(null, false)
+            }, 5000)
             console.log('Error creating blog entry')
         }
     }

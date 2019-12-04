@@ -3,6 +3,7 @@ import loginService from './services/login'
 import blogsService from './services/blogs'
 import Blog from './components/Blog'
 import SubmitBlog from './components/SubmitBlog'
+import Notification from './components/Notification'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -11,12 +12,16 @@ const App = () => {
   
   const [blogs, setBlogs] = useState([])
 
+  const [error, setError] = useState(false)
+  const [message, setMessage] = useState(null)
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
       blogsService.setToken(user.token)
+      getAllBlogs()
     }
   }, [])
 
@@ -31,7 +36,9 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      getAllBlogs()
     } catch (exception) {
+      handleMessage('Wrong username or password', true)
       console.log('Wrong credentials')
     }
   }
@@ -70,19 +77,29 @@ const App = () => {
     setUser(null)
   }
 
+  const handleMessage = (notification, notificationError) => {
+    setError(notificationError)
+    setMessage(notification)
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
+  }
+
   if (user === null) {
     return (
       <div>
         <h1>Log in to application</h1>
+        <Notification error={error} message={message}/>
         {loginForm()}
       </div>
     )
   } else return (
     <div>
       <h1>Blogs</h1>
+      <Notification error={error} message={message} />
       <p>{user.name} logged in <button onClick={() => logout()}>Logout</button></p>
 
-      <SubmitBlog />
+      <SubmitBlog message={handleMessage} />
       {content()}
     </div>
   )
