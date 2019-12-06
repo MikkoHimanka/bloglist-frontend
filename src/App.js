@@ -39,11 +39,38 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      getAllBlogs()
     } catch (exception) {
       handleMessage('Wrong username or password', true)
       console.log('Wrong credentials')
     }
+  }
+
+  const handleRemove = (blog) => {
+    if (window.confirm(`Remove ${blog.title} by ${blog.author}`))
+    try{
+      blogsService.remove(blog.id)
+    } catch (exception) {
+      console.log('Error removing a blog post')
+    }
+
+    getAllBlogs()
+  }
+
+  const handleLike = (blog) => {
+    const updatedBlog = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      likes: blog.likes + 1,
+    }
+
+    try {
+      blogsService.like(updatedBlog, blog.id)
+    } catch (exception) {
+      console.log('Error trying to "like" a blog')
+    }
+
+    getAllBlogs()
   }
 
   const loginForm = () => (
@@ -61,12 +88,12 @@ const App = () => {
       <button type="submit">Login</button>
     </form>
   )
-
+  
   const getAllBlogs = async ()  => {
     try {
       const blogs = await blogsService.getAll()
 
-      setBlogs(blogs)
+      setBlogs(blogs.sort((a, b) => b.likes - a.likes))
     } catch (exception) { console.log('error in retrieving blog entries') }
   }
 
@@ -77,10 +104,7 @@ const App = () => {
     </Togglable>
   )
 
-  const content = () => {
-    getAllBlogs()
-    return blogs.map(blog => <li key={blog.id}><Blog blog={blog} /></li>)
-  }
+  const content = () => blogs.map(blog => <div key={blog.id}><Blog user={user} blog={blog} handleRemove={handleRemove} handleLike={handleLike} /></div>)
 
   const logout = () => {
     window.localStorage.clear()
