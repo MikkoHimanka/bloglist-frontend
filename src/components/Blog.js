@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import blogsService from '../services/blogs'
 
 const Blog = ({ user, blog, handleRemove, handleLike }) => {
   const [clicked, setClicked] = useState(true)
@@ -13,16 +12,28 @@ const Blog = ({ user, blog, handleRemove, handleLike }) => {
   }
 
   if (!clicked) {
-    return (
-    <div style={blogStyle}>
-      <div onClick={() => setClicked(!clicked)}>
-        "{blog.title}" by {blog.author}<br />
-        <a href={blog.url}>{blog.url}</a><br />
-        {blog.likes} likes<button onClick={() => handleLike(blog)}>Like</button><br />
-        Added by {blog.user.name}<br />
-        <button onClick={() => handleRemove(blog)}>Delete</button>
+    if (user.username === blog.user.username) {
+      return (
+      <div style={blogStyle}>
+        <div onClick={() => setClicked(!clicked)}>
+          "{blog.title}" by {blog.author}<br />
+          <a href={blog.url}>{blog.url}</a><br />
+          {blog.likes} likes<button onClick={() => handleLike(blog)}>Like</button><br />
+          Added by {blog.user.name}<br />
+          <button onClick={() => handleRemove(blog)}>Delete</button>
+        </div>
       </div>
-    </div>
+      )
+    }
+    return (
+      <div style={blogStyle}>
+        <div onClick={() => setClicked(!clicked)}>
+          "{blog.title}" by {blog.author}<br />
+          <a href={blog.url}>{blog.url}</a><br />
+          {blog.likes} likes<button onClick={() => handleLike(blog)}>Like</button><br />
+          Added by {blog.user.name}<br />
+        </div>
+      </div>
     )
   }
 
