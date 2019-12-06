@@ -1,9 +1,10 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react'
 import loginService from './services/login'
 import blogsService from './services/blogs'
 import Blog from './components/Blog'
 import SubmitBlog from './components/SubmitBlog'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -14,6 +15,8 @@ const App = () => {
 
   const [error, setError] = useState(false)
   const [message, setMessage] = useState(null)
+
+  const blogFormRef = React.createRef()
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -67,6 +70,13 @@ const App = () => {
     } catch (exception) { console.log('error in retrieving blog entries') }
   }
 
+  const submitBlogForm = () => (
+    <Togglable buttonLabel={"New Blog"} ref={blogFormRef}>
+      <h2>Create new</h2>
+      <SubmitBlog message={handleMessage} />
+    </Togglable>
+  )
+
   const content = () => {
     getAllBlogs()
     return blogs.map(blog => <li key={blog.id}><Blog blog={blog} /></li>)
@@ -98,8 +108,7 @@ const App = () => {
       <h1>Blogs</h1>
       <Notification error={error} message={message} />
       <p>{user.name} logged in <button onClick={() => logout()}>Logout</button></p>
-
-      <SubmitBlog message={handleMessage} />
+      {submitBlogForm()}
       {content()}
     </div>
   )

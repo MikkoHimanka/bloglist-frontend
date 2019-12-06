@@ -9,6 +9,7 @@
     "react-scripts": "3.0.1"
   },
   "scripts": {
+    "watch": "nodemon index.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -29,5 +30,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3003"
+  "proxy": "http://localhost:3003",
+  "devDependencies": {
+    "nodemon": "^2.0.1"
+  }
 }

@@ -15,7 +15,6 @@ const Notification = ({error, message}) => {
     const normalStyle = {
         padding: 10,
         color: 'green',
-        backgroundColor: 'light-grey'
     }
 
     if (error) {
