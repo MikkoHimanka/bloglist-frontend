@@ -39,7 +39,7 @@ const Blog = ({ user, blog, handleRemove, handleLike }) => {
 
 	return (
 		<div style={blogStyle}>
-			<div onClick={() => setClicked(!clicked)}>
+			<div onClick={() => setClicked(!clicked)} className="showButton">
       &quot;{blog.title}&quot; by {blog.author}
 			</div>
 		</div>
