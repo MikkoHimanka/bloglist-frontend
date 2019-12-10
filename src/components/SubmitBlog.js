@@ -3,7 +3,7 @@ import blogsService from '../services/blogs'
 import { useField } from '../hooks'
 
 
-const SubmitBlog = ({ message }) => {
+const SubmitBlog = ({ message, getAllBlogs }) => {
 	const title = useField('text')
 	const author = useField('text')
 	const url = useField('text')
@@ -17,11 +17,12 @@ const SubmitBlog = ({ message }) => {
 		}
 
 		try {
-			blogsService.create(blog)
+			await blogsService.create(blog)
 			message(`A new blog ${title.value} by ${author.value} added`, false)
 			title.reset()
 			author.reset()
 			url.reset()
+			getAllBlogs()
 			setTimeout(() => {
 				message(null, false)
 			}, 5000)

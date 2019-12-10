@@ -99,7 +99,7 @@ const App = () => {
 	const submitBlogForm = () => (
 		<Togglable buttonLabel={'New Blog'} ref={blogFormRef}>
 			<h2>Create new</h2>
-			<SubmitBlog message={handleMessage} />
+			<SubmitBlog message={handleMessage} getAllBlogs={getAllBlogs} />
 		</Togglable>
 	)
 
