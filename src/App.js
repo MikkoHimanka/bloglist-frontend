@@ -8,8 +8,8 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 
 const App = () => {
-	const username = useField('')
-	const password = useField('')
+	const username = useField('text')
+	const password = useField('password')
 	const [user, setUser] = useState(null)
 
 	const [blogs, setBlogs] = useState([])
@@ -32,14 +32,14 @@ const App = () => {
 	const handleLogin = async (event) => {
 		event.preventDefault()
 		try {
-			const user = await loginService.login({ username, password })
+			const user = await loginService.login({ username: username.value, password: password.value })
 
 			window.localStorage.setItem('loggedUser', JSON.stringify(user))
 			blogsService.setToken(user.token)
 
 			setUser(user)
-			username.clear()
-			password.clear()
+			username.reset()
+			password.reset()
 		} catch (exception) {
 			handleMessage('Wrong username or password', true)
 			console.log('Wrong credentials')
@@ -78,11 +78,11 @@ const App = () => {
 		<form onSubmit={handleLogin}>
 			<div>
         Username
-				<input {...username} />
+				<input {...username.attributes()} />
 			</div>
 			<div>
         Password
-				<input {...password} />
+				<input {...password.attributes()} />
 			</div>
 			<button type="submit">Login</button>
 		</form>

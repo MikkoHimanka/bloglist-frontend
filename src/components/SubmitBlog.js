@@ -1,23 +1,27 @@
-import React, { useState } from 'react'
+import React from 'react'
 import blogsService from '../services/blogs'
+import { useField } from '../hooks'
 
 
 const SubmitBlog = ({ message }) => {
-	const [title, setTitle] = useState('')
-	const [author, setAuthor] = useState('')
-	const [url, setUrl] = useState('')
+	const title = useField('text')
+	const author = useField('text')
+	const url = useField('text')
 
 	const handleSubmit = async (event) => {
 		event.preventDefault()
 		const blog = {
-			title: title,
-			author: author,
-			url: url
+			title: title.value,
+			author: author.value,
+			url: url.value
 		}
 
 		try {
 			blogsService.create(blog)
-			message(`A new blog ${title} by ${author} added`, false)
+			message(`A new blog ${title.value} by ${author.value} added`, false)
+			title.reset()
+			author.reset()
+			url.reset()
 			setTimeout(() => {
 				message(null, false)
 			}, 5000)
@@ -31,9 +35,9 @@ const SubmitBlog = ({ message }) => {
 	}
 	return (
 		<form onSubmit={handleSubmit}>
-            title: <input type="text" value={title} name="title" onChange={({ target }) => setTitle(target.value)} /><br />
-            author: <input type="text" value={author} name="author" onChange={({ target }) => setAuthor(target.value)} /><br />
-            url: <input type="text" value={url} name="url" onChange={({ target }) => setUrl(target.value)} /><br />
+            title: <input {...title.attributes()} /><br />
+            author: <input {...author.attributes()} /><br />
+            url: <input {...url.attributes()} /><br />
 			<button type="submit">Create</button>
 		</form>
 	)
