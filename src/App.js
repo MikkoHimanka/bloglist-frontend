@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useField } from './hooks'
 import loginService from './services/login'
 import blogsService from './services/blogs'
 import Blog from './components/Blog'
@@ -7,8 +8,8 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 
 const App = () => {
-	const [username, setUsername] = useState('')
-	const [password, setPassword] = useState('')
+	const username = useField('')
+	const password = useField('')
 	const [user, setUser] = useState(null)
 
 	const [blogs, setBlogs] = useState([])
@@ -37,8 +38,8 @@ const App = () => {
 			blogsService.setToken(user.token)
 
 			setUser(user)
-			setUsername('')
-			setPassword('')
+			username.clear()
+			password.clear()
 		} catch (exception) {
 			handleMessage('Wrong username or password', true)
 			console.log('Wrong credentials')
@@ -77,13 +78,11 @@ const App = () => {
 		<form onSubmit={handleLogin}>
 			<div>
         Username
-				<input type="text" value={username}
-					name="Username" onChange={({ target }) => setUsername(target.value)} />
+				<input {...username} />
 			</div>
 			<div>
         Password
-				<input type="password" value={password}
-					name="Password" onChange={({ target }) => setPassword(target.value)} />
+				<input {...password} />
 			</div>
 			<button type="submit">Login</button>
 		</form>
