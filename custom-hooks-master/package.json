@@ -9,6 +9,7 @@
     "react-scripts": "3.0.1"
   },
   "scripts": {
+	"watch": "nodemon index.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -31,6 +32,7 @@
     ]
   },
   "devDependencies": {
-    "json-server": "^0.15.0"
+    "json-server": "^0.15.0",
+    "nodemon": "^2.0.1"
   }
 }
